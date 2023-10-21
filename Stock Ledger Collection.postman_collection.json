@@ -1,0 +1,58 @@
+{
+	"info": {
+		"_postman_id": "0721aee3-9594-489f-bbfb-2447c996ac57",
+		"name": "Stock Ledger Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22557226",
+		"_collection_link": "https://martian-equinox-733330.postman.co/workspace/Carteira-de-A%C3%A7%C3%B5es~f180a86c-7651-4093-8abb-7c23970bed0e/collection/22557226-0721aee3-9594-489f-bbfb-2447c996ac57?action=share&creator=22557226&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Get all positions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/positions",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"positions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new position",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ticker\":\"CIEL3\",\n    \"quantity\": 35,\n    \"price\": 29.22,\n    \"currency\": \"BRL\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/positions",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"positions"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
