@@ -4,7 +4,7 @@
 		"name": "Stock Ledger Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "22557226",
-		"_collection_link": "https://martian-equinox-733330.postman.co/workspace/Carteira-de-A%C3%A7%C3%B5es~f180a86c-7651-4093-8abb-7c23970bed0e/collection/22557226-0721aee3-9594-489f-bbfb-2447c996ac57?action=share&creator=22557226&source=collection_link"
+		"_collection_link": "https://martian-equinox-733330.postman.co/workspace/Carteira-de-A%25C3%25A7%25C3%25B5es~f180a86c-7651-4093-8abb-7c23970bed0e/collection/22557226-0721aee3-9594-489f-bbfb-2447c996ac57?action=share&source=collection_link&creator=22557226"
 	},
 	"item": [
 		{
@@ -49,6 +49,51 @@
 					"path": [
 						"api",
 						"positions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Stocks List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/stocks?search=MGLU",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"stocks"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "MGLU"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Specific Stock Data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/stocks/MGLU3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"stocks",
+						"MGLU3"
 					]
 				}
 			},
