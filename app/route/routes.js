@@ -1,4 +1,5 @@
 const PositionController = require('../controller/positionController');
+const StocksController = require('../controller/stocksController');
 
 module.exports = {
     getPositions: ((app) => {
@@ -33,5 +34,22 @@ module.exports = {
         });
     }),
 
-    
+    getStocks: ((app) => {
+        console.log("rota /api/stocks criada");
+
+        app.get('/api/stocks', (req, res) => {
+            const {search} = req.query;
+            StocksController.getStocks(req, res, search);
+        });
+    }),
+    getStocksByTicket: ((app) => {
+        console.log("rota /api/stocks criada");
+
+        app.get('/api/stocks/:ticket', (req, res) => {
+            const ticket = req.params.ticket;
+            StocksController.getStockByTicker(req, res, ticket);
+        });
+    }),
+
+
 }
