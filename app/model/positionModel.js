@@ -1,4 +1,5 @@
 const client = require('../../config/dbconnection');
+const {add} = require("nodemon/lib/rules");
 const ObjectId = require('mongodb').ObjectId;
 
 const collection = client.db('web-project').collection('stock-ledger')
@@ -20,11 +21,49 @@ module.exports = class PositionModel {
         return await cursor.next();
     };
 
+    static async getPositionByTicker(ticker){
+        console.log('Finding position by ticker:', ticker);
+
+        const cursor = await collection.find({"ticker": ticker});
+
+        return await cursor.toArray();
+    };
+
+    static async getPositionsGroupedByTicker(){
+        const aggregateQuery = [
+            {
+                $group: {
+                    _id: "$ticker",
+                    quantity: { $sum: "$quantity" },
+                    averagePrice: { $avg: "$price" },
+                    logo: { $first: "$logo" }
+                }
+            },
+            {
+                $project: {
+                    ticker: "$_id",
+                    _id: 0, // exclui o campo _id do resultado
+                    totalInvested: { $multiply: ["$averagePrice", "$quantity"] },
+                    quantity: 1, // inclui o campo totalQuantity no resultado
+                    averagePrice: 1, // inclui o campo averagePrice no resultado
+                    logo: 1 // inclui o campo logo no resultado
+                }
+            }
+        ];
+
+        const aggregatedResults = await collection.aggregate(aggregateQuery).toArray();
+        console.log(aggregatedResults);
+
+        return aggregatedResults;
+    };
+
     static async addNewPosition(positionPayload){
         console.log(`Adding new position:  [${positionPayload}]`);
         try {
             const newPosition = {
+                name: positionPayload.name,
                 ticker: positionPayload.ticker,
+                logo: positionPayload.logo,
                 quantity: positionPayload.quantity,
                 price: positionPayload.price,
                 currency: positionPayload.currency,
@@ -33,7 +72,8 @@ module.exports = class PositionModel {
 
             const addedPosition = await collection.insertOne(newPosition);
 
-            console.log(`New movie inserted with the following id ${addedPosition.insertedId}`);
+            console.log(`New position inserted with the following id ${addedPosition.insertedId}`);
+            return addedPosition.insertedId;
         } catch (error) {
             console.log(`Something wrong happened inserting new position: ${error}`);
         }

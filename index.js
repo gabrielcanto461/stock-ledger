@@ -3,6 +3,7 @@ const app = require('./config/server');
 
 routes.addPosition(app);
 routes.getPositions(app);
+routes.getPositionsGrouped(app);
 routes.getPositionById(app);
 routes.updatePositionById(app);
 routes.deletePositionById(app);

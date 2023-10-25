@@ -6,7 +6,7 @@ const baseUrl = "https://brapi.dev/api";
 const positionSchema = Joi.object().keys(
     {
         ticker: Joi.string().required().min(1).max(7),
-        quantity: Joi.number().required().min(1).max(50),
+        quantity: Joi.number().required().min(1),
         price: Joi.number().required().min(0),
         currency: Joi.string().optional()
     }
@@ -25,7 +25,7 @@ module.exports = class StocksController {
             const axiosResponse = await axios.get(brapiUri);
 
             const stocks = axiosResponse.data.stocks;
-            console.log(stocks);
+            //console.log(stocks);
 
             if (stocks.length === 0) {
                 return response.status(404).json({message: `Stocks not found containing ${search}`});
@@ -40,13 +40,28 @@ module.exports = class StocksController {
             try {
                 var brapiUri = baseUrl.concat(`/quote/${ticker}?range=1d&interval=1d&token=${apiKey}`);
                 const res = await axios.get(brapiUri);
-                const stock = res.data.results.at(0);
+                const stock = res.data.results[0];
 
                 console.log(stock);
                 return response.status(200).json({
                     name: stock.longName,
-                    price: `R$ ${stock.regularMarketPrice}`
+                    price: stock.regularMarketPrice,
+                    logo: stock.logourl
                 });
+            } catch (error) {
+                console.error(`Erro ao buscar informações sobre a ação: ${ticker} error: [${error}]`)
+            }
+        }
+    }
+
+    static async getStockInfoByTicker(ticker) {
+        if (ticker != null) {
+            try {
+                var brapiUri = baseUrl.concat(`/quote/${ticker}?range=1d&interval=1d&token=${apiKey}`);
+                const res = await axios.get(brapiUri);
+                const stock = res.data.results.at(0);
+
+                return stock.regularMarketPrice;
             } catch (error) {
                 console.error(`Erro ao buscar informações sobre a ação: ${ticker} error: [${error}]`)
             }

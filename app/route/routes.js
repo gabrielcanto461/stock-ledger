@@ -4,7 +4,20 @@ const StocksController = require('../controller/stocksController');
 module.exports = {
     getPositions: ((app) => {
         console.log("Rota /api/positions criada");
-        app.get('/api/positions', PositionController.getPositions);
+        app.get('/api/positions', (req, res) => {
+            const {ticker} = req.query;
+            if (ticker) {
+                console.log(`Ticker [${ticker}] present in request`)
+                PositionController.getPositionByTicker(req, res, ticker);
+            } else {
+                PositionController.getPositions(req, res);
+            }
+        });
+    }),
+
+    getPositionsGrouped: ((app) => {
+        console.log("Rota /api/positions/grouped criada");
+        app.get('/api/positions/grouped', PositionController.getPositionsGroupedByTicker);
     }),
 
     getPositionById: ((app) => {
@@ -34,6 +47,14 @@ module.exports = {
         });
     }),
 
+    getPositionByTicker: ((app) => {
+        console.log("rota /api/positions/{ticker} criada");
+        app.get('/api/positions', (req, res) => {
+            const {ticker} = req.query;
+            PositionController.getPositionByTicker(req, res, ticker);
+        });
+    }),
+
     getStocks: ((app) => {
         console.log("rota /api/stocks criada");
 
@@ -42,11 +63,12 @@ module.exports = {
             StocksController.getStocks(req, res, search);
         });
     }),
+
     getStocksByTicket: ((app) => {
         console.log("rota /api/stocks criada");
 
-        app.get('/api/stocks/:ticket', (req, res) => {
-            const ticket = req.params.ticket;
+        app.get('/api/stocks/:ticker', (req, res) => {
+            const ticket = req.params.ticker;
             StocksController.getStockByTicker(req, res, ticket);
         });
     }),
